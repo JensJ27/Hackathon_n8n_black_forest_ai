@@ -1,0 +1,875 @@
+{
+  "name": "draft_v01",
+  "nodes": [
+    {
+      "parameters": {
+        "url": "={{ $json.result.sample }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1360,
+        432
+      ],
+      "id": "5c529145-3e84-40b7-91c6-1577a5b8fe00",
+      "name": "Get Result"
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Start FLUX Generation Job').item.json.polling_url }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        896,
+        448
+      ],
+      "id": "dba1ed76-3aa9-4a55-bbfd-2b254c801d71",
+      "name": "Do the Polling",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "4Ss4PReEcp00nYnZ",
+          "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "d35ae158-063c-49e6-a13b-3c7fe086534f",
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "=Ready",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1104,
+        448
+      ],
+      "id": "d3dcef61-233c-4830-8033-65db2f104695",
+      "name": "Is it ready?"
+    },
+    {
+      "parameters": {
+        "amount": 1
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1120,
+        688
+      ],
+      "id": "a1fcadc1-0522-44c1-af84-d9eaca5d5b91",
+      "name": "Wait",
+      "webhookId": "b7b3b366-8210-4e20-883f-a959eeb6ee1b"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.bfl.ai/v1/flux-kontext-pro",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "x-key",
+              "value": "796f1412-e812-4b2c-8b18-64c34f5b7ed5"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "prompt",
+              "value": "={{ $json.output }}"
+            },
+            {
+              "name": "aspect_ratio",
+              "value": "1:1"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        624,
+        448
+      ],
+      "id": "a03b1ac4-ae62-46c4-94e6-5653277a36c6",
+      "name": "Start FLUX Generation Job",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "4Ss4PReEcp00nYnZ",
+          "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Start a Black Forst Lab Job\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n^--- Here you can customize Parameters and Model",
+        "height": 432,
+        "width": 272
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        544,
+        336
+      ],
+      "typeVersion": 1,
+      "id": "2db320d8-34f4-4325-9e7c-2ea283c6468d",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## ✨ Get the Result\n",
+        "height": 256,
+        "width": 256,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1280,
+        336
+      ],
+      "typeVersion": 1,
+      "id": "d20d0206-c622-44f5-90e9-91cff7a1992f",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## Add you Magic here",
+        "height": 224,
+        "width": 224,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1568,
+        352
+      ],
+      "typeVersion": 1,
+      "id": "7247394e-0d09-46b0-88f1-d33acedfc47e",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1616,
+        432
+      ],
+      "id": "e1970538-f2fb-442f-a42b-daadeef3afa1",
+      "name": "Your Use-Case? ❤️"
+    },
+    {
+      "parameters": {
+        "content": "## The Result comes Asynchronous\n\n\n\n\n\n\n\n\n\nYou can leave this block. we essentially are checking back every 1second if the image is done",
+        "height": 288,
+        "width": 352,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        912,
+        592
+      ],
+      "typeVersion": 1,
+      "id": "f40f84b3-262a-449b-93a5-99eb43c2fdb1",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "path": "e9d85966-e3b8-4b0d-8b71-5fb314ba624f",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        240,
+        -720
+      ],
+      "id": "281dbb5f-ecb5-431c-ada6-b92790726661",
+      "name": "Webhook",
+      "webhookId": "e9d85966-e3b8-4b0d-8b71-5fb314ba624f"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        448,
+        -720
+      ],
+      "id": "7d203b32-9368-4630-8c7c-466e2e75943a",
+      "name": "Get row(s) in sheet"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1216,
+        -416
+      ],
+      "id": "0ee0d077-29f7-40f9-9633-6a538af8c322",
+      "name": "Update_row"
+    },
+    {
+      "parameters": {
+        "actorId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        }
+      },
+      "type": "@apify/n8n-nodes-apify.apify",
+      "typeVersion": 1,
+      "position": [
+        848,
+        -928
+      ],
+      "id": "14ef9584-de84-4935-8b34-9571eb7006ca",
+      "name": "Run an Actor",
+      "credentials": {
+        "apifyApi": {
+          "id": "uLTckoVKzHNv1iyf",
+          "name": "Apify account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "Scrape single URL"
+      },
+      "type": "@apify/n8n-nodes-apify.apify",
+      "typeVersion": 1,
+      "position": [
+        1152,
+        -720
+      ],
+      "id": "07eeaf9b-313c-4e21-86f7-febbb6a46d19",
+      "name": "Scrape single URL",
+      "credentials": {
+        "apifyApi": {
+          "id": "uLTckoVKzHNv1iyf",
+          "name": "Apify account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "path": "lg-fashion",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "806840b1-7e57-432b-ae19-1ade375395c7",
+      "name": "Webhook (Start)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -240,
+        1584
+      ],
+      "webhookId": "143b043b-f412-44ee-a5ef-7c92b4d024ac"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json[\"csv_path\"]}}",
+              "operation": "isEmpty"
+            }
+          ]
+        }
+      },
+      "id": "802a68d9-61ff-43e4-b755-69c4fced641b",
+      "name": "IF has csv_path?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        48,
+        1584
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "read"
+      },
+      "id": "6ff3cc05-2da4-4e10-be7b-872d1eef9ac7",
+      "name": "Spreadsheet File (read csv)",
+      "type": "n8n-nodes-base.spreadsheetFile",
+      "typeVersion": 1,
+      "position": [
+        320,
+        1392
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "itemFromList"
+      },
+      "id": "e6940564-6a20-45ee-9527-a4bdb74f4571",
+      "name": "Item Lists (pick row)",
+      "type": "n8n-nodes-base.itemLists",
+      "typeVersion": 1,
+      "position": [
+        560,
+        1392
+      ]
+    },
+    {
+      "parameters": {
+        "functionCode": "\n// Build LangGraph input from a CSV row\nfunction splitList(s){ return (s||'').split(';').map(x => x.trim()).filter(Boolean); }\nconst row = items[0].json || {};\nconst profile = {\n  contact_id: row.contact_id,\n  email: row.email,\n  firstname: row.firstname || 'Friend',\n  locale: row.locale || 'en-US',\n  country: row.country,\n  city: row.city,\n  tags: splitList(row.tags),\n  interest_keywords: splitList(row.interest_keywords)\n};\nconst product = {\n  sku: 'SKU-DEMO-001',\n  title: 'Demo Product',\n  category: 'hoodies',\n  colorways: ['#000000','#F5F5F5'],\n  price_band: 'mid',\n  launch_type: 'drop',\n  brand_name: 'Demo Brand'\n};\nconst options = {\n  aspect: '1:1',\n  channel: 'instagram_feed',\n  fallback_image_url: 'https://dummyimage.com/1080x1080/111827/f5f5f5.png&text=Backup',\n  ab_variant: 'A'\n};\nreturn [{ json: { profile, product, persona: null, options } }];\n"
+      },
+      "id": "4041887e-a256-4581-9f27-79ca3a76c61f",
+      "name": "Function (build input from CSV)",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        800,
+        1392
+      ]
+    },
+    {
+      "parameters": {
+        "functionCode": "\n// Expect body to contain profile/product/options (fallbacks applied)\nconst b = $json || {};\nconst profile = b.profile || {};\nif (!profile.firstname) profile.firstname = 'Friend';\nif (!profile.locale) profile.locale = 'en-US';\nconst product = b.product || {\n  sku: 'SKU-DEMO-001',\n  title: 'Demo Product',\n  category: 'hoodies',\n  colorways: ['#000000','#F5F5F5'],\n  price_band: 'mid',\n  launch_type: 'drop',\n  brand_name: 'Demo Brand'\n};\nconst options = b.options || {\n  aspect: '1:1',\n  channel: 'instagram_feed',\n  fallback_image_url: 'https://dummyimage.com/1080x1080/111827/f5f5f5.png&text=Backup',\n  ab_variant: 'A'\n};\nreturn [{ json: { profile, product, persona: b.persona ?? null, options } }];\n"
+      },
+      "id": "fcc779ed-407e-4c3b-837e-f471c1ef8659",
+      "name": "Function (build input from webhook)",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        320,
+        1760
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{$env.LG_BASE}}/threads",
+        "jsonParameters": true,
+        "options": {}
+      },
+      "id": "c96a2031-7862-4401-8347-ec18d75b0fb8",
+      "name": "HTTP Create Thread",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        1088,
+        1584
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{$env.LG_BASE}}/runs",
+        "jsonParameters": true,
+        "options": {}
+      },
+      "id": "8e853c1a-535b-4728-b29c-8a2221c195bc",
+      "name": "HTTP Start Run",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        1328,
+        1584
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{$env.LG_BASE}}/runs/{{$node[\\\"HTTP Start Run\\\"].json[\\\"run_id\\\"]}}",
+        "jsonParameters": true,
+        "options": {}
+      },
+      "id": "97ee3886-01f1-4039-b4f9-c0816096e62b",
+      "name": "HTTP Get Run (poll)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        1568,
+        1584
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json[\"status\"]}}",
+              "operation": "notEqual",
+              "value2": "running"
+            },
+            {
+              "value1": "={{$json[\"status\"]}}",
+              "operation": "notEqual",
+              "value2": "pending"
+            }
+          ]
+        }
+      },
+      "id": "99488f85-4fe0-46e0-95ae-0b0329c39933",
+      "name": "IF Run Done?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        1808,
+        1584
+      ]
+    },
+    {
+      "parameters": {
+        "amount": 2,
+        "unit": "seconds"
+      },
+      "id": "cf9f2b4c-be32-4177-adcb-8d04cc46ccdb",
+      "name": "Wait 2s",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
+      "position": [
+        1808,
+        1760
+      ],
+      "webhookId": "4aa2b9a2-2eda-443f-b167-98663c54fccc"
+    },
+    {
+      "parameters": {
+        "url": "={{$env.LG_BASE}}/threads/{{$node[\\\"HTTP Create Thread\\\"].json[\\\"thread_id\\\"]}}",
+        "jsonParameters": true,
+        "options": {}
+      },
+      "id": "21bdfee8-0ec3-4003-8a00-87024e50d3a8",
+      "name": "HTTP Get Thread State",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        2048,
+        1584
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "8c00830b-0b5b-4744-bb43-00cd2de4cdce",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        2288,
+        1584
+      ]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1oC733DitpozcS62XFs-F6lrN460nO-IPoGhbsU0fAfI",
+          "mode": "list",
+          "cachedResultName": "personas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1oC733DitpozcS62XFs-F6lrN460nO-IPoGhbsU0fAfI/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1oC733DitpozcS62XFs-F6lrN460nO-IPoGhbsU0fAfI/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        112,
+        448
+      ],
+      "id": "114e00d2-8ee3-4e1c-8751-4b196cf075fb",
+      "name": "Get row(s) in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "cMJhgar1bCy6MUao",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -144,
+        416
+      ],
+      "id": "d2a1f61b-d9d8-48be-b7e8-11220ec8bda4",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Product: White polo shirt\nReference Image: https://image1.lacoste.com/dw/image/v2/AAQM_PRD/on/demandware.static/Sites-DE-Site/Sites-master/de/dwf97294ef/L1212_001_24.jpg?imwidth=1920&impolicy=zoom\nStyle: Premium fashion ad, studio lighting, seamless background, natural pose, high resolution.",
+        "options": {
+          "systemMessage": "You generate Flux prompts for fashion advertising.\nGiven a product (e.g., \"white polo shirt\") and a reference image URL, create a short vivid prompt for Flux that describes a person wearing this exact product in a professional advertisement photo.\nKeep under 70 words. Do not include the URL in your answer."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        288,
+        448
+      ],
+      "id": "91cb7fd3-cc4e-4392-b581-066e33e47fed",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {
+          "temperature": 0.7
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        272,
+        688
+      ],
+      "id": "cb69e779-15d9-46cc-b5b6-4c129cefd283",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "fhZfCyzBF9hRGei9",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Do the Polling": {
+      "main": [
+        [
+          {
+            "node": "Is it ready?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is it ready?": {
+      "main": [
+        [
+          {
+            "node": "Get Result",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Do the Polling",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Start FLUX Generation Job": {
+      "main": [
+        [
+          {
+            "node": "Do the Polling",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Result": {
+      "main": [
+        [
+          {
+            "node": "Your Use-Case? ❤️",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        []
+      ]
+    },
+    "Webhook (Start)": {
+      "main": [
+        [
+          {
+            "node": "IF has csv_path?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF has csv_path?": {
+      "main": [
+        [
+          {
+            "node": "Function (build input from webhook)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Spreadsheet File (read csv)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Spreadsheet File (read csv)": {
+      "main": [
+        [
+          {
+            "node": "Item Lists (pick row)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Item Lists (pick row)": {
+      "main": [
+        [
+          {
+            "node": "Function (build input from CSV)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Function (build input from CSV)": {
+      "main": [
+        [
+          {
+            "node": "HTTP Create Thread",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Function (build input from webhook)": {
+      "main": [
+        [
+          {
+            "node": "HTTP Create Thread",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Create Thread": {
+      "main": [
+        [
+          {
+            "node": "HTTP Start Run",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Start Run": {
+      "main": [
+        [
+          {
+            "node": "HTTP Get Run (poll)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Get Run (poll)": {
+      "main": [
+        [
+          {
+            "node": "IF Run Done?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF Run Done?": {
+      "main": [
+        [
+          {
+            "node": "HTTP Get Thread State",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait 2s",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait 2s": {
+      "main": [
+        [
+          {
+            "node": "HTTP Get Run (poll)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Get Thread State": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet1": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Start FLUX Generation Job",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "05fd6da0-3a53-4d94-bd0d-f57a0ef34e30",
+  "meta": {
+    "instanceId": "578cbc363a46584354cd668498897c81bcdd534d26a24a44e8d461b2e0f2dc44"
+  },
+  "id": "LqZU3evk3qbMhDBt",
+  "tags": []
+}
